@@ -52,7 +52,7 @@ class API:
         @return Boolean ICPMコマンドの結果を返却します。
         """
         # PINGにて疎通チェック
-        response = Util.command(["ping", "-n", "1", vmhost])
+        response = Util.command(["ping", "-n", "2", vmhost])
 
         if(response.returncode == 0):
             return True
