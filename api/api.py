@@ -164,6 +164,7 @@ class API:
                     command='jobschcontrol'+ ' cm_ansible/'+'【D'+chgVmStatus["ArchType"].lstrip('0') +'】自動停止'+' start'
                 print(command)
 
+                #ジョブ実行
                 ExecResult = Util.command(command)
                 if(ExecResult.returncode == 1):
                     ##エラーが発生した場合排他ロックを解除
