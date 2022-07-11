@@ -1,4 +1,3 @@
-
 # 実行するPythonがあるパス
 pythonpath = './'
 
