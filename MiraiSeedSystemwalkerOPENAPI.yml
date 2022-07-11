@@ -1,0 +1,278 @@
+openapi: 3.0.2
+x-stoplight:
+  id: s2s8pg8e0wags
+info:
+  title: MiraiSeedSystemWalkerAPI
+  version: 0.1.0
+  description: ミライシード開発環境操作用API設計です。
+  contact:
+    email: obata@benesse-infoshell.co.jp
+paths:
+  /:
+    get:
+      summary: ROOT
+      description: |-
+        @param  void
+        @return message コメント
+
+        本ページでは単純に文字列を返します。
+        処理はしません！
+      operationId: root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+              examples: {}
+  /vm/status:
+    get:
+      summary: GET_VM_STATUS
+      description: |-
+        @param  void
+        @return 各面のステータス情報とロック状況を返却
+      operationId: getVmStatus_vm_status_get
+      responses:
+        '200':
+          description: レスポンス成功時の処理
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  example-1:
+                    - '[{"ArchType": "01", "TOTAL": 19, "UP": 0, "DOWN": 19, "Pending": false, "Status": false}]'
+                    - '[{"ArchType": "02", "TOTAL": 19, "UP": 0, "DOWN": 19, "Pending": false, "Status": false}]'
+                    - '[{"ArchType": "03", "TOTAL": 19, "UP": 0, "DOWN": 19, "Pending": false, "Status": false}]'
+                    - '[{"ArchType": "04", "TOTAL": 19, "UP": 0, "DOWN": 19, "Pending": false, "Status": false}]'
+                    - '[{"ArchType": "05", "TOTAL": 19, "UP": 0, "DOWN": 19, "Pending": false, "Status": false}]'
+                    - '[{"ArchType": "06", "TOTAL": 19, "UP": 0, "DOWN": 19, "Pending": false, "Status": false}]'
+                    - '[{"ArchType": "07", "TOTAL": 19, "UP": 0, "DOWN": 19, "Pending": false, "Status": false}]'
+                items:
+                  $ref: '#/components/schemas/ReturnVMStatus'
+              examples:
+                EXAM VM_STATUS_ALL_TRUE|PENDING_TRUE:
+                  value:
+                    - ArchType: '01'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: true
+                      Status: true
+                    - ArchType: '02'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: true
+                      Status: true
+                    - ArchType: '03'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: true
+                      Status: true
+                    - ArchType: '04'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: true
+                      Status: true
+                    - ArchType: '05'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: true
+                      Status: true
+                    - ArchType: '06'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: true
+                      Status: true
+                    - ArchType: '07'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: true
+                      Status: true
+                EXAM VM_STATUS_TRUE:
+                  value:
+                    - ArchType: '01'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: false
+                      Status: true
+                    - ArchType: '02'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: false
+                      Status: true
+                    - ArchType: '03'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: false
+                      Status: true
+                    - ArchType: '04'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: false
+                      Status: true
+                    - ArchType: '05'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: false
+                      Status: true
+                    - ArchType: '06'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: false
+                      Status: true
+                    - ArchType: '07'
+                      TOTAL: 0
+                      UP: 0
+                      DOWN: 0
+                      Pending: false
+                      Status: true
+  /vm/status/change:
+    put:
+      summary: SET_VM_STATUS
+      operationId: setVmStatus_vm_status_change_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              x-examples:
+                example-1:
+                  - ArchType: '04'
+                    Status: false
+              items:
+                type: object
+                properties:
+                  ArchType:
+                    type: string
+                    description: 処理対象の面番号
+                  Status:
+                    type: boolean
+                    description: 処理を実行するステータス
+            examples:
+              EXAM SEND:
+                value:
+                  - ArchType: '01'
+                    Status: true
+                  - ArchType: '02'
+                    Status: true
+                  - ArchType: '03'
+                    Status: true
+                  - ArchType: '04'
+                    Status: true
+        required: true
+        description: ''
+      responses:
+        '200':
+          description: レスポンス成功時の処理
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                x-examples:
+                  example-1:
+                    message: StatusOK
+              examples:
+                STATUS_OK:
+                  value:
+                    message: StatusOK
+        '401':
+          description: ERRORが発生した場合の処理
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+              examples:
+                STATUS_BUSY:
+                  value:
+                    detail: There is data that is already being processed
+          headers: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          headers: {}
+        '500':
+          description: Internal Server Error
+      x-internal: false
+      description: |
+        処理が完了した際には、{Status:OK}をJSON形式で返却します。
+        処理途中で、問題が発生した場合はERROR_CODE_422へジャンプします。
+components:
+  schemas:
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+    ReturnVMStatus:
+      title: ReturnVMStatus
+      x-stoplight:
+        id: d492cb1chvdex
+      type: object
+      x-internal: false
+      x-examples: {}
+      properties:
+        ArchType:
+          type: string
+          description: 面番号
+        TOTAL:
+          type: integer
+          description: 合計VMエントリ数
+        UP:
+          type: integer
+          description: 起動中のVM数
+        DOWN:
+          type: integer
+          description: 停止中のVM数
+        Pending:
+          type: boolean
+          description: 処理実行中の場合TRUE、そうでない場合はFALSE
+        Status:
+          type: boolean
+          description: 現在の面ステータス
