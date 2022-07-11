@@ -23,7 +23,7 @@ class Util:
         @return NONE
         """
         if(set_process != 'STOP' and set_process !='START'):
-            raise  HTTPException(status_code=401, detail='SET_PROCESS_VALUE_ERROR')
+            raise  HTTPException(status_code=406, detail='SET_PROCESS_VALUE_ERROR')
         f = open('./util/LOCKFILE/lock'+arch_num, 'w', encoding='UTF-8')
         f.write(set_process)
         f.close()

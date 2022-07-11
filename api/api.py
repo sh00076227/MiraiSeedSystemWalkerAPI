@@ -59,7 +59,7 @@ class API:
         elif(response.returncode == 1):
             return False
         else:
-            raise HTTPException(status_code=401, detail='PING_FUNCTION_ERROR')
+            raise HTTPException(status_code=406, detail='PING_FUNCTION_ERROR')
 
     def getVmStatus(archType):
         """
@@ -137,7 +137,7 @@ class API:
         for chgVmStatus in VmChgParam:
             #排他ロックがかかっている物があれば例外を返す
             if((chgVmStatus["ArchType"] in pendigArch) == True):
-                raise HTTPException(status_code=401, detail='There is data that is already being processed')
+                raise HTTPException(status_code=406, detail='There is data that is already being processed')
             #現在のステータスと変更仕様としているステータスに差異があればisExecをTrueに
             isExec=False
             for getVmStatus in vmStatusList:
@@ -156,7 +156,19 @@ class API:
                 Util.lock(arch_num=chgVmStatus["ArchType"],set_process=chgStatus)
 
                 #SystemWalkerコマンド実行
-                print(chgVmStatus["ArchType"] )
-                print(chgVmStatus["Status"])
+                #実行コマンド文生成
+                command=""
+                if(chgVmStatus["Status"] == True):
+                    command='jobschcontrol'+ ' cm_ansible/'+'【D'+chgVmStatus["ArchType"].lstrip('0') +'】自動起動'+' start'
+                else:
+                    command='jobschcontrol'+ ' cm_ansible/'+'【D'+chgVmStatus["ArchType"].lstrip('0') +'】自動停止'+' start'
+                print(command)
+
+                ExecResult = Util.command(command)
+                if(ExecResult.returncode == 1):
+                    ##エラーが発生した場合排他ロックを解除
+                    Util.unlock(arch_num=chgVmStatus["ArchType"])
+                    raise HTTPException(status_code=406, detail=ExecResult.stderr)
+
                 # Util.command('')
         return {'message':'StatusOK'}

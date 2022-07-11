@@ -191,7 +191,7 @@ paths:
                 STATUS_OK:
                   value:
                     message: StatusOK
-        '401':
+        '406':
           description: ERRORが発生した場合の処理
           content:
             application/json:
