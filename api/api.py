@@ -157,11 +157,11 @@ class API:
 
                 #SystemWalkerコマンド実行
                 #実行コマンド文生成
-                command=""
+                command=[]
                 if(chgVmStatus["Status"] == True):
-                    command='jobschcontrol'+ ' cm_ansible/'+'【D'+chgVmStatus["ArchType"].lstrip('0') +'】自動起動'+' start'
+                    command=['jobschcontrol','cm_ansible/'+'【D'+chgVmStatus["ArchType"].lstrip('0') +'】自動起動','start']
                 else:
-                    command='jobschcontrol'+ ' cm_ansible/'+'【D'+chgVmStatus["ArchType"].lstrip('0') +'】自動停止'+' start'
+                    command=['jobschcontrol','cm_ansible/'+'【D'+chgVmStatus["ArchType"].lstrip('0') +'】自動停止',' start']
                 print(command)
 
                 #ジョブ実行
