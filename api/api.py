@@ -7,6 +7,8 @@ from fastapi import HTTPException
 
 
 class API:
+    #本システムが起動しているシステム
+    working_host='msdmn9-01-01v'
 
     ######################################################################
     #ここにはVメイン処理になるようなもの、共通化できないものを記載してください。#
@@ -44,6 +46,9 @@ class API:
             "msddb9-" + str(arch_num) + "-02v",
             "msdot9-" + str(arch_num) + "-01v"
         ]
+        # 本システムが稼働中のサーバーを除却
+        if API.working_host in server:
+            server.remove(API.working_host)
         return server
 
     def isWorkVM(vmhost: str):
