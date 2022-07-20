@@ -137,7 +137,7 @@ class API:
         for chgVmStatus in VmChgParam:
             #排他ロックがかかっている物があれば例外を返す
             if((chgVmStatus["ArchType"] in pendigArch) == True):
-                raise HTTPException(status_code=406, detail='There is data that is already being processed')
+                raise HTTPException(status_code=406, detail='既に処理が進行中です。')
             #現在のステータスと変更仕様としているステータスに差異があればisExecをTrueに
             isExec=False
             for getVmStatus in vmStatusList:
@@ -170,6 +170,7 @@ class API:
                     ##エラーが発生した場合排他ロックを解除
                     Util.unlock(arch_num=chgVmStatus["ArchType"])
                     raise HTTPException(status_code=406, detail=ExecResult.stderr)
-
+            else:
+                raise HTTPException(status_code=406, detail='要求ステータスと現状ステータスが同一のため、変更処理を実行できませんでした。')
                 # Util.command('')
         return {'message':'StatusOK'}
